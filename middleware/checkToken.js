@@ -11,15 +11,15 @@ const checkToken = (req, res, next) => {
       const bearer = header.split(' ');
       const token = bearer[1] || req.token;
       const decodedtoken = jwt.verify(token, SECRET);
+      console.log(decodedtoken);
+      req.user = decodedtoken;
       return next();
     }
     return res.status(401).json({
       message: 'Unauthorized'
     });
   } catch (e) {
-    return res.status(401).json({
-      message: 'Unauthorized'
-    });
+    return next(e);
   }
 };
 
