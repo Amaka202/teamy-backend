@@ -3,7 +3,12 @@ const db = require('../db/db');
 
 const getArticles = async (req, res, next) => {
   try {
-    const result = await db.query('SELECT * FROM articles');
+    const result = await db.query(`
+    SELECT firstname, lastname, jobrole, profile_img, articles.title, article
+    FROM users
+    INNER JOIN articles 
+    ON articles.user_id = users.id
+    ORDER BY articles.createdAt`);
     return res.status(200).json({ message: 'fetched all articles successfully', data: result.rows });
   } catch (error) {
     return next(error);

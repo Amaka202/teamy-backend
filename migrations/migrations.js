@@ -47,12 +47,10 @@ const createCommentTableQuery = `
     CREATE TABLE IF NOT EXISTS
     comments(
         id UUID PRIMARY KEY NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
-        user_id UUID NOT NULL,
         article_id UUID NULL,
         gif_id UUID NULL,
         comment VARCHAR NOT NULL,
         createdat TIMESTAMP DEFAULT NOW(),
-        FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE,
         FOREIGN KEY (article_id) REFERENCES "articles" (id) ON DELETE CASCADE,
         FOREIGN KEY (gif_id) REFERENCES "gifs" (id) ON DELETE CASCADE
     )
