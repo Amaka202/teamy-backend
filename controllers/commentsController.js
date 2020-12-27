@@ -1,15 +1,21 @@
 const db = require('../db/db');
 
-const getArticleComments = async (req, res, next) => {
+const postArticleComments = async (req, res, next) => {
+  const { id } = req.params;
   try {
+    await db.query(
+      'INSERT INTO comments (comment, article_id) VALUES ($1, $2)',
+      [req.body.comment, id]
+    );
+
     const article = await db.query(
       'SELECT * FROM articles WHERE id=$1',
-      [req.params.id]
+      [id]
     );
 
     const comments = await db.query(
-      'SELECT * FROM comments WHERE article_id=$1',
-      [req.params.id]
+      'SELECT * FROM comments WHERE articles_id=$1',
+      [id]
     );
 
     article.rows[0].comments = comments.rows;
@@ -23,28 +29,22 @@ const getArticleComments = async (req, res, next) => {
   }
 };
 
-const postArticleComments = async (req, res, next) => {
+const postGifComments = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const comment = await db.query(
-      'INSERT INTO comments (comment, article_id) VALUES ($1, $2)',
-      [req.body.comment, req.params.id]
+    await db.query(
+      'INSERT INTO comments (comment, gif_id) VALUES ($1, $2)',
+      [req.body.comment, id]
     );
-    return res.status(200).json({ status: 'success', data: comment.rows[0] });
-  } catch (error) {
-    return next(error);
-  }
-};
 
-const getGifComments = async (req, res, next) => {
-  try {
     const gif = await db.query(
       'SELECT * FROM gifs WHERE id=$1',
-      [req.params.id]
+      [id]
     );
 
     const comments = await db.query(
       'SELECT * FROM comments WHERE gif_id=$1',
-      [req.params.id]
+      [id]
     );
 
     gif.rows[0].comments = comments.rows;
@@ -58,18 +58,6 @@ const getGifComments = async (req, res, next) => {
   }
 };
 
-const postGifComments = async (req, res, next) => {
-  try {
-    const comment = await db.query(
-      'INSERT INTO comments (comment, gif_id) VALUES ($1, $2)',
-      [req.body.comment, req.params.id]
-    );
-    return res.status(200).json({ status: 'success', data: comment.rows[0] });
-  } catch (error) {
-    return next(error);
-  }
-};
-
 module.exports = {
-  getArticleComments, postArticleComments, getGifComments, postGifComments
+  postArticleComments, postGifComments
 };
