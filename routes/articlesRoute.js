@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  getArticles, editArticle, postArticles, deleteArticle
+  editArticle, postArticles, deleteArticle, getArticles
 } = require('../controllers/articlesController');
 
 const checkToken = require('../middleware/checkToken');
