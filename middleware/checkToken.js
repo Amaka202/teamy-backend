@@ -11,8 +11,8 @@ const checkToken = (req, res, next) => {
       const bearer = header.split(' ');
       const token = bearer[1] || req.token;
       const decodedtoken = jwt.verify(token, SECRET);
-      console.log(decodedtoken);
       req.user = decodedtoken;
+      console.log({ decodedtoken });
       return next();
     }
     return res.status(401).json({

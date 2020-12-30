@@ -2,7 +2,8 @@ const db = require('../db/db');
 const { cloudinary } = require('../utils/cloudinary');
 
 const postGif = async (req, res, next) => {
-  const { title, gif } = req.body;
+  const { title } = req.body;
+  const { gif } = req.files;
   try {
     if (!title || !gif) {
       return res.status(400).json({
@@ -33,9 +34,28 @@ const postGif = async (req, res, next) => {
 };
 
 const deleteGif = async (req, res, next) => {
+  const { id: userId } = req.user;
+  const { articleId } = req.params;
   try {
+    // fetch the article
+    // get the user id from the aticle fetched
+    if (!articleId) {
+      return res.status(401).json({
+        staus: 'error',
+        message: 'Article id needed'
+      });
+    }
+    const article = await db.query(
+      'SELECT user_id FROM articles WHERE id=$1', [articleId]
+    );
+    if (article.rows[0] && article.rows[0].user_id !== userId) {
+      return res.status(401).json({
+        staus: 'error',
+        message: 'Unauthorized',
+      });
+    }
     const result = await db.query(
-      'DELETE FROM articles WHERE id=$1', [req.params.id]
+      'DELETE FROM articles WHERE id=$1', [articleId]
     );
     return res.status(200).json({
       status: 'success',
