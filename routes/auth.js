@@ -4,8 +4,11 @@ const router = express.Router();
 
 const { signUpUser } = require('../controllers/auth');
 const { loggIn } = require('../controllers/auth');
+const { sendMail } = require('../utils/sendMail');
 
-router.post('/signup', signUpUser);
+console.log(sendMail);
+
+router.post('/signup', signUpUser, sendMail);
 
 router.post('/login', loggIn);
 
