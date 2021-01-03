@@ -2,7 +2,7 @@
   "name": "teamy",
   "version": "1.0.0",
   "description": "Teamy is an internal social network for employees of an organization. this application is to be used to facilitate more interaction between colleagues and promote team bonding.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "node ./migrations/index.js",
