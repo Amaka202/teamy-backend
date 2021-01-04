@@ -15,13 +15,13 @@ const db = require('../db/db');
 
 const signUpUser = async (req, res, next) => {
   const {
-    firstname, lastname, username, profile_img, email, password, gender, jobrole, department
+    firstname, lastname, username, profile_img, email, password, gender, jobrole, location
   } = req.body;
 
   console.log(req.body);
 
   try {
-    if (!firstname || !lastname || !username || !email || !gender || !jobrole || !department) {
+    if (!firstname || !lastname || !username || !email || !gender || !jobrole || !location) {
       return res.status(400).json({
         message: 'please fill required field'
       });
@@ -43,8 +43,8 @@ const signUpUser = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await db.query(
 
-      'INSERT INTO users (firstname, lastname, username, profile_img, email, password, gender, jobrole, department) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *',
-      [firstname, lastname, username, profile_img, email, hashedPassword, gender, jobrole, department]
+      'INSERT INTO users (firstname, lastname, username, profile_img, email, password, gender, jobrole, location) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *',
+      [firstname, lastname, username, profile_img, email, hashedPassword, gender, jobrole, location]
     );
     const token = jwt.sign(
       { username, id: result.rows[0].id },

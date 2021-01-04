@@ -11,7 +11,7 @@ const createUserTableQuery = `
         password VARCHAR NOT NULL,
         gender VARCHAR NOT NULL,
         jobRole VARCHAR NOT NULL,
-        department VARCHAR NOT NULL,
+        location VARCHAR NOT NULL,
         createdat TIMESTAMP DEFAULT NOW()
     )
 `;

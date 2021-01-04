@@ -8,7 +8,7 @@ const { sendMail } = require('../utils/sendMail');
 
 console.log(sendMail);
 
-router.post('/signup', signUpUser, sendMail);
+router.post('/signup', signUpUser);
 
 router.post('/login', loggIn);
 
