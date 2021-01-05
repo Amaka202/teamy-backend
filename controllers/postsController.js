@@ -9,6 +9,7 @@ const getPosts = async (req, res, next) => {
     INNER JOIN posts
     ON posts.user_id = users.id
     ORDER BY posts.createdat`);
+    console.log(result);
     return res.status(200).json({ message: 'fetched all posts successfully', data: result.rows });
   } catch (error) {
     return next(error);
@@ -31,6 +32,7 @@ const createPost = async (req, res, next) => {
       'INSERT INTO posts (title, article, user_id, gif) VALUES ($1,$2,$3,$4) RETURNING *',
       [title, article, userId, gif]
     );
+    console.log(result);
     return res.status(200).json({
       status: 'success',
       message: 'Post successfully posted',

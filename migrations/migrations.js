@@ -1,4 +1,5 @@
 const createUserTableQuery = `
+    DROP TABLE IF EXISTS users CASCADE;
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     CREATE TABLE IF NOT EXISTS
     users(
