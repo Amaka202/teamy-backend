@@ -12,7 +12,9 @@ const { json, urlencoded } = require('body-parser');
 
 const authRoute = require('./routes/auth');
 
-const userRoute = require('./routes/userRoutes');
+const userRoute = require('./routes/userRoute');
+
+const usersRoute = require('./routes/usersRoutes');
 
 const articlesRoute = require('./routes/postsRoute');
 
@@ -38,6 +40,7 @@ app.use(urlencoded({ limit: '50mb', extended: true }));
 app.use(expressFileUpload({ useTempFiles: true }));
 app.use('/api/v1', authRoute);
 app.use('/api/v1', userRoute);
+app.use('/api/v1', usersRoute);
 app.use('/api/v1', articlesRoute);
 app.use('/api/v1', gifRoute);
 app.use('/api/v1', uploadRoute);
@@ -49,6 +52,7 @@ app.all('*', (req, res) => res.status(404).json({
   message: 'route not found'
 }));
 
-app.listen(5001, () => {
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => {
   console.log('server started...');
 });
