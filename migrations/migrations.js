@@ -40,7 +40,7 @@ const createCommentTableQuery = `
         commenter_id UUID NOT NULL,
         comment VARCHAR NOT NULL,
         createdat TIMESTAMP DEFAULT NOW(),
-        FOREIGN KEY (post_id) REFERENCES "posts" (id) ON DELETE CASCADE
+        FOREIGN KEY (post_id) REFERENCES "posts" (id) ON DELETE CASCADE,
         FOREIGN KEY (commenter_id) REFERENCES "users" (id) ON DELETE CASCADE
     )
 `;
