@@ -4,6 +4,8 @@ const router = express.Router({ mergeParams: true });
 
 const postComments = require('../controllers/commentsController');
 
-router.post('/posts/:postId/comment', postComments);
+const checkToken = require('../middleware/checkToken');
+
+router.post('/posts/:postId/comment', checkToken, postComments);
 
 module.exports = router;
