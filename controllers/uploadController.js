@@ -1,15 +1,16 @@
 const cloudinary = require('cloudinary').v2;
 
 const uploadFile = async (req, res, next) => {
-  const { gif } = req.files;
+  console.log({ req });
+  const { File } = req.files;
   try {
-    if (!gif) {
+    if (!File) {
       return res.status(400).json({
-        message: 'file is needed'
+        message: 'file not found'
       });
     }
 
-    const uploadResponse = await cloudinary.uploader.upload(gif.tempFilePath,
+    const uploadResponse = await cloudinary.uploader.upload(myFile.tempFilePath,
       { resource_type: 'auto' });
 
     if (uploadResponse) {
