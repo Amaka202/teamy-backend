@@ -15,7 +15,7 @@ const postComments = async (req, res, next) => {
     }
 
     await db.query(
-      'INSERT INTO comments (comment, post_id, commenter_id) VALUES ($1, $2)',
+      'INSERT INTO comments (comment, post_id, commenter_id) VALUES ($1, $2, $3)',
       [comment, postId, userId]
     );
 
