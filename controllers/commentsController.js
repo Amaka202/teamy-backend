@@ -14,35 +14,43 @@ const postComments = async (req, res, next) => {
       });
     }
 
-    await db.query(
-      'INSERT INTO comments (comment, post_id) VALUES ($1, $2)',
-      [comment, postId]
-    );
-
-    const post = await db.query(
-      'SELECT * FROM posts WHERE id=$1',
-      [postId]
-    );
-
-    const poster = await db.query('SELECT * FROM users WHERE id=$1', [userId]);
-
     const comments = await db.query(
-      'SELECT * FROM comments WHERE post_id=$1',
-      [postId]
+      'INSERT INTO comments (comment, post_id, commenter_id) VALUES ($1, $2, $3)',
+      [comment, postId, userId]
     );
-
-    post.rows[0].comments = comments.rows;
-
-    post.rows[0].poster = poster.rows;
 
     return res.status(200).json({
       status: 'success',
       message: 'article comment fetched successfully',
-      data: post.rows[0]
+      data: comments.rows[0]
     });
   } catch (error) {
     return next(error);
   }
 };
 
-module.exports = postComments;
+const getComments = async (req, res, next) => {
+  const { postId } = req.params;
+
+  try {
+    const comments = await db.query(
+      `SELECT comments.comment, comments.createdat, users.firstname, users.lastname, users.profile_img
+      FROM comments
+      INNER JOIN users
+      ON comments.commenter_id = users.id
+      WHERE post_id=$1
+      ORDER BY comments.createdat DESC`,
+      [postId]
+    );
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'article comment fetched successfully',
+      data: comments.rows
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+module.exports = { postComments, getComments };

@@ -8,7 +8,7 @@ const getPosts = async (req, res, next) => {
     FROM users
     INNER JOIN posts
     ON posts.user_id = users.id
-    ORDER BY posts.createdat`);
+    ORDER BY posts.createdat DESC`);
     console.log(result);
     return res.status(200).json({ message: 'fetched all posts successfully', data: result.rows });
   } catch (error) {

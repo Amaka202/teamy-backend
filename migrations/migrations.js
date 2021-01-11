@@ -1,5 +1,4 @@
 const createUserTableQuery = `
-    DROP TABLE IF EXISTS users CASCADE;
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     CREATE TABLE IF NOT EXISTS
     users(
@@ -32,14 +31,17 @@ const createPostTableQuery = `
 `;
 
 const createCommentTableQuery = `
+    DROP TABLE IF EXISTS comments CASCADE;
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     CREATE TABLE IF NOT EXISTS
     comments(
         id UUID PRIMARY KEY NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
         post_id UUID NOT NULL,
+        commenter_id UUID NOT NULL,
         comment VARCHAR NOT NULL,
         createdat TIMESTAMP DEFAULT NOW(),
-        FOREIGN KEY (post_id) REFERENCES "posts" (id) ON DELETE CASCADE
+        FOREIGN KEY (post_id) REFERENCES "posts" (id) ON DELETE CASCADE,
+        FOREIGN KEY (commenter_id) REFERENCES "users" (id) ON DELETE CASCADE
     )
 `;
 
