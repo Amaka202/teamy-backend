@@ -28,9 +28,10 @@ const postComments = async (req, res, next) => {
 
     const comments = await db.query(
       `SELECT comments.comment, comments.createdat, users.firstname, users.lastname, users.profile_img
-      FROM comments WHERE post_id=$1
+      FROM comments
       INNER JOIN users
       ON comments.commenter_id = users.id
+      WHERE post_id=$1
       ORDER BY comments.createdat DESC`,
       [postId]
     );
