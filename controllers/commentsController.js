@@ -22,7 +22,7 @@ const postComments = async (req, res, next) => {
     return res.status(200).json({
       status: 'success',
       message: 'article comment fetched successfully',
-      data: comments.rows
+      data: comments.rows[0]
     });
   } catch (error) {
     return next(error);
