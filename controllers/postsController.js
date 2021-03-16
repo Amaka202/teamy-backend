@@ -4,7 +4,7 @@ const db = require('../db/db');
 const getPosts = async (req, res, next) => {
   try {
     const result = await db.query(`
-    SELECT users.firstname, users.id, users.lastname, users.jobrole, users.profile_img, posts.id, posts.title, posts.article, posts.gif, posts.createdat
+    SELECT users.firstname, users.id, users.lastname, users.jobrole, users.profile_img, posts.id, posts.title, posts.article, posts.user_id, posts.gif, posts.createdat
     FROM users
     INNER JOIN posts
     ON posts.user_id = users.id
