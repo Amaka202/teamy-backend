@@ -23,12 +23,14 @@ const signUpUser = async (req, res, next) => {
   try {
     if (!firstname || !lastname || !username || !email || !gender || !jobrole || !location) {
       return res.status(400).json({
+        status: 'error',
         message: 'please fill required field'
       });
     }
     const findByUsername = await db.query('SELECT * FROM users WHERE username=$1 LIMIT 1', [username]);
     if (findByUsername.rows.length) {
       return res.status(400).json({
+        status: 'error',
         message: 'username already exists'
       });
     }
@@ -36,6 +38,7 @@ const signUpUser = async (req, res, next) => {
     const findByEmail = await db.query('SELECT * FROM users WHERE email=$1 LIMIT 1', [email]);
     if (findByEmail.rows.length) {
       return res.status(400).json({
+        status: 'error',
         message: 'email already exists'
       });
     }
@@ -50,7 +53,9 @@ const signUpUser = async (req, res, next) => {
       { username, id: result.rows[0].id },
       SECRET, { expiresIn: '30d' }
     );
-    return res.status(200).json({ message: 'user sign up successful', data: result.rows[0], token });
+    return res.status(200).json({
+      status: 'success', message: 'user sign up successful', data: result.rows[0], token
+    });
   } catch (error) {
     return next(error);
   }
@@ -62,6 +67,7 @@ const loggIn = async (req, res, next) => {
   try {
     if (!email || !password) {
       return res.status(400).json({
+        status: 'error',
         message: 'email and password required'
       });
     }
@@ -70,6 +76,7 @@ const loggIn = async (req, res, next) => {
     console.log(findByEmail.rows);
     if (!findByEmail.rows.length) {
       return res.status(401).json({
+        status: 'error',
         message: 'invalid username or password'
       });
     }
@@ -80,6 +87,7 @@ const loggIn = async (req, res, next) => {
 
     if (hashedPassword === false) {
       return res.status(401).json({
+        status: 'error',
         message: 'invalid password'
       });
     }
@@ -89,7 +97,9 @@ const loggIn = async (req, res, next) => {
       SECRET, { expiresIn: '30d' }
     );
 
-    return res.status(200).json({ message: 'Login succesfull', data: findByEmail.rows[0], token });
+    return res.status(200).json({
+      status: 'success', message: 'Login succesfull', data: findByEmail.rows[0], token
+    });
   } catch (error) {
     return next(error);
   }

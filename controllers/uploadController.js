@@ -6,6 +6,7 @@ const uploadFile = async (req, res, next) => {
   try {
     if (!File) {
       return res.status(400).json({
+        status: 'error',
         message: 'file not found'
       });
     }
@@ -15,12 +16,14 @@ const uploadFile = async (req, res, next) => {
 
     if (uploadResponse) {
       return res.status(200).json({
+        status: 'success',
         message: 'Image uploaded successfully',
         result: uploadResponse.secure_url
       });
     }
 
     return res.status(400).json({
+      status: 'error',
       message: 'an error occured'
     });
   } catch (error) {
