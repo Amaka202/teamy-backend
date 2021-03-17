@@ -25,6 +25,7 @@ const createPostTableQuery = `
         title VARCHAR NOT NULL,
         article VARCHAR NULL,
         gif VARCHAR NULL,
+        isEdited BOOLEAN NOT NULL,
         createdat TIMESTAMP DEFAULT NOW(),
         FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE
     )

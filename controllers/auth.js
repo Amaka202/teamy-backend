@@ -24,7 +24,7 @@ const signUpUser = async (req, res, next) => {
     if (!firstname || !lastname || !username || !email || !gender || !jobrole || !location) {
       return res.status(400).json({
         status: 'error',
-        message: 'please fill required field'
+        message: 'please fill required fields'
       });
     }
     const findByUsername = await db.query('SELECT * FROM users WHERE username=$1 LIMIT 1', [username]);

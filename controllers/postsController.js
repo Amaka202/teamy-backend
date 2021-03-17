@@ -4,7 +4,8 @@ const db = require('../db/db');
 const getPosts = async (req, res, next) => {
   try {
     const result = await db.query(`
-    SELECT users.firstname, users.id, users.lastname, users.jobrole, users.profile_img, posts.id, posts.title, posts.article, posts.user_id, posts.gif, posts.createdat
+    SELECT users.firstname, users.id, users.lastname, users.jobrole, users.profile_img, posts.id, posts.title, posts.article, posts.user_id, posts.isEdited, posts.gif, posts.createdat,
+    (SELECT count(*) FROM comments WHERE post_id = posts.id) AS comment_count
     FROM users
     INNER JOIN posts
     ON posts.user_id = users.id
@@ -29,8 +30,8 @@ const createPost = async (req, res, next) => {
     }
 
     const result = await db.query(
-      'INSERT INTO posts (title, article, user_id, gif) VALUES ($1,$2,$3,$4) RETURNING *',
-      [title, article, userId, gif]
+      'INSERT INTO posts (title, article, user_id, gif, isEdited) VALUES ($1,$2,$3,$4,$5) RETURNING *',
+      [title, article, userId, gif, false]
     );
     console.log(result);
     return res.status(200).json({
@@ -49,10 +50,10 @@ const editArticle = async (req, res, next) => {
   const { postId } = req.params;
   try {
     // fetch the article
-    // get the user id from the aticle fetched
+    // get the user id from the article fetched
     if (!(postId)) {
       return res.status(401).json({
-        staus: 'error',
+        status: 'error',
         message: 'Post id needed'
       });
     }
@@ -66,11 +67,20 @@ const editArticle = async (req, res, next) => {
       });
     }
 
-    const articleToUpdate = article || post.rows[0].article;
-    const titleToUpdate = title || post.rows[0].title;
+    // const articleToUpdate = article || post.rows[0].article;
+    // const titleToUpdate = title || post.rows[0].title;
+    if (article === post.rows[0].article && title === post.rows[0].title) {
+      return res.status(200).json({
+        status: 'success',
+        message: 'no changes made',
+        article,
+        title
+      });
+    }
+
     const result = await db.query(
-      'UPDATE posts SET title=$1, article=$2 WHERE id=$3 RETURNING *',
-      [titleToUpdate, articleToUpdate, postId]
+      'UPDATE posts SET title=$1, article=$2, isEdited=$3 WHERE id=$4 RETURNING *',
+      [title, article, true, postId]
     );
     return res.status(200).json({
       status: 'success',
